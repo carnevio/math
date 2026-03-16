@@ -80,5 +80,27 @@ Deno.test("parse returns Fraction for '5/8'", () => {
   assertAlmostEquals(fraction.toFloat(0.01), 0.63);
 });
 
+Deno.test("parse throws error for invalid format", () => {
+  try {
+    Fraction.parse("abc");
+    throw new Error("No error thrown");
+  } catch (e) {
+    const err = e as Error;
+    assertEquals(err.message, 'illegal syntax: "[numerator]/[denominator]" required');
+  }
+});
 
+Deno.test("parse throws error for non-numeric values", () => {
+  try {
+    Fraction.parse("a/b");
+    throw new Error("No error thrown");
+  } catch (e) {
+    const err = e as Error;
+    assertEquals(err.message, "non-numeric numerator/denominator");
+  }
+});
 
+Deno.test("toString returns correct value for 3/4", () => {
+  const fraction = new Fraction(3, 4);
+  assertEquals(fraction.toString(), "3/4");
+});
