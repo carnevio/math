@@ -72,6 +72,7 @@ Deno.test("1/2 / 2/3 = 3/4", () => {
   assertAlmostEquals(left.toFloat(0.01), 0.75);
 });
 
+//String wird zerlegt
 Deno.test("parse returns Fraction for '5/8'", () => {
   // Act
   const fraction = Fraction.parse("5/8");
@@ -80,6 +81,7 @@ Deno.test("parse returns Fraction for '5/8'", () => {
   assertAlmostEquals(fraction.toFloat(0.01), 0.63);
 });
 
+//falsches Format
 Deno.test("parse throws error for invalid format", () => {
   try {
     Fraction.parse("abc");
@@ -90,6 +92,7 @@ Deno.test("parse throws error for invalid format", () => {
   }
 });
 
+//keine zahl
 Deno.test("parse throws error for non-numeric values", () => {
   try {
     Fraction.parse("a/b");
@@ -100,11 +103,14 @@ Deno.test("parse throws error for non-numeric values", () => {
   }
 });
 
+//zu einem string formatieren
 Deno.test("toString returns correct value for 3/4", () => {
   const fraction = new Fraction(3, 4);
   assertEquals(fraction.toString(), "3/4");
 });
 
+
+//Nenner = 0 im Konstrukor
 Deno.test("constructor throws error for 0", () => {
   try {
     new Fraction(3, 0);
@@ -115,6 +121,8 @@ Deno.test("constructor throws error for 0", () => {
   }
 });
 
+
+// Nenner = 0 zuerst aber parsen
 Deno.test("parse throws error for 0", () => {
   try {
     Fraction.parse("3 / 0");
