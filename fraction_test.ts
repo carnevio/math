@@ -104,3 +104,23 @@ Deno.test("toString returns correct value for 3/4", () => {
   const fraction = new Fraction(3, 4);
   assertEquals(fraction.toString(), "3/4");
 });
+
+Deno.test("constructor throws error for 0", () => {
+  try {
+    new Fraction(3, 0);
+    throw new Error("No error thrown");
+  } catch (e) {
+    const err = e as Error;
+    assertEquals(err.message, "denominator cannot be zero");
+  }
+});
+
+Deno.test("parse throws error for 0", () => {
+  try {
+    Fraction.parse("3 / 0");
+    throw new Error("No error thrown");
+  } catch (e) {
+    const err = e as Error;
+    assertEquals(err.message, "denominator cannot be zero");
+  }
+});
