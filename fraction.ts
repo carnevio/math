@@ -1,4 +1,5 @@
 import { roundTo } from "./utils.ts";
+import { gcdEuclid } from "./gcd.ts";
 
 export class Fraction {
   constructor(
@@ -8,6 +9,7 @@ export class Fraction {
     if (denominator === 0) {
       throw new Error("denominator cannot be zero");
     }
+    this._autoCancel();
   }
 
   public add(other: Fraction) {
@@ -16,6 +18,7 @@ export class Fraction {
     const newDenominator = this.denominator * other.denominator;
     this.numerator = newNumerator;
     this.denominator = newDenominator;
+    this._autoCancel();
   }
 
   public subtract(other: Fraction) {
@@ -24,6 +27,7 @@ export class Fraction {
     const newDenominator = this.denominator * other.denominator;
     this.numerator = newNumerator;
     this.denominator = newDenominator;
+    this._autoCancel();
   }
 
   public multiply(other: Fraction) {
@@ -31,6 +35,7 @@ export class Fraction {
     const newDenominator = this.denominator * other.denominator;
     this.numerator = newNumerator;
     this.denominator = newDenominator;
+    this._autoCancel();
   }
 
   public divide(other: Fraction) {
@@ -38,6 +43,7 @@ export class Fraction {
     const newDenominator = this.denominator * other.numerator;
     this.numerator = newNumerator;
     this.denominator = newDenominator;
+    this._autoCancel();
   }
 
   public toFloat(precision: number): number {
@@ -59,5 +65,19 @@ export class Fraction {
       throw new Error(`non-numeric numerator/denominator`);
     }
     return new Fraction(numerator, denominator);
+  }
+
+  
+  private _autoCancel() {
+    const divisor = gcdEuclid(this.numerator, this.denominator);
+    if (divisor !== 0 && divisor !== 1) {
+      this.numerator = this.numerator / divisor;
+      this.denominator = this.denominator / divisor;
+    }
+  }
+
+  public cancel(): Fraction {
+    const divisor = gcdEuclid(this.numerator, this.denominator);
+    return new Fraction(this.numerator / divisor, this.denominator / divisor);
   }
 }

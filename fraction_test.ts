@@ -132,3 +132,39 @@ Deno.test("parse throws error for 0", () => {
     assertEquals(err.message, "denominator cannot be zero");
   }
 });
+
+Deno.test("Fraction.cancel() kürzt 2/4 zu 1/2", () => {
+  const f = new Fraction(2, 4);
+  const gekuerzt = f.cancel();
+  assertEquals(gekuerzt.toString(), "1/2");
+});
+
+Deno.test("Fraction.cancel() von 1/1 bleibt 1/1", () => {
+  const f = new Fraction(1, 1);
+  const gekuerzt = f.cancel();
+  assertEquals(gekuerzt.toString(), "1/1");
+});
+
+Deno.test("Fraction(2, 4) wird automatisch zu 1/2 gekürzt", () => {
+  const f = new Fraction(2, 4);
+  assertEquals(f.toString(), "1/2");
+});
+
+Deno.test("Fraction.parse('6/9') wird automatisch zu 2/3 gekürzt", () => {
+  const f = Fraction.parse("6/9");
+  assertEquals(f.toString(), "2/3");
+});
+
+Deno.test("1/3 + 2/6 ergibt automatisch 2/3 (gekürzt)", () => {
+  const left = new Fraction(1, 3);
+  const right = new Fraction(2, 6);
+  left.add(right);
+  assertEquals(left.toString(), "2/3");
+});
+
+Deno.test("1/2 * 2/4 ergibt automatisch 1/4 (gekürzt)", () => {
+  const left = new Fraction(1, 2);
+  const right = new Fraction(2, 4);
+  left.multiply(right);
+  assertEquals(left.toString(), "1/4");
+});
